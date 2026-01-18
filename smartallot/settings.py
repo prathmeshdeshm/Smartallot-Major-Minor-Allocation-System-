@@ -128,4 +128,5 @@ CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localho
 # Pagination
 REST_FRAMEWORK = {
     'PAGE_SIZE': env.int('PAGE_SIZE', default=10),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 }
