@@ -1,4 +1,7 @@
 from django.urls import path
+# Note: Due to non-standard project structure (app files in root),
+# using absolute import. In a properly structured Django project,
+# this would be: from . import views
 import views
 
 urlpatterns = [

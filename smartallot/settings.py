@@ -12,12 +12,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'test-secret-key-for-testing-only'
+# This is a test key only - in production, use environment variables
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'test-secret-key-for-testing-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Restrict in production
 
 # Application definition
 # Since app files (models.py, views.py, etc.) are in BASE_DIR (root),

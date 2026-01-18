@@ -7,6 +7,10 @@ from django.utils import timezone
 from datetime import timedelta
 
 # Import from root level (current app directory)
+# Note: These absolute imports work due to non-standard structure.
+# When project is restructured into proper Django layout, change to:
+# from allotment.models import ...
+# from allotment.utils import ...
 from models import (
     Student, MinorBranch, OpenElective,
     MinorPreference, MinorAllocation,
