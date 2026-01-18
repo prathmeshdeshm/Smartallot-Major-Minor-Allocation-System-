@@ -14,5 +14,8 @@ else:
 # Try to get the password variable
 db_pass = os.getenv("DB_PASSWORD")
 
-# Print the result
-print(f"The password read from the environment is: {db_pass}")
+# Print the result safely (do not expose secrets)
+if db_pass:
+    print("DB_PASSWORD variable exists in the environment (not displayed).")
+else:
+    print("DB_PASSWORD not found in environment.")

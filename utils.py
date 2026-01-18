@@ -7,6 +7,27 @@ from .models import (
 )
 from django.db.models import Min, Count
 
+# ============================================================================
+# Related Names Reference for Query Construction
+# ============================================================================
+# This module uses Django's reverse relation lookups extensively.
+# The following related_name values are defined in models.py:
+#
+# Student foreign keys in preference models:
+#   - MinorPreference.student → Student.minor_preferences
+#   - DoubleMinorPreference.student → Student.double_minor_preferences
+#   - OEPreference.student → Student.oe_preferences
+#
+# Student foreign keys in allocation models (using Django defaults):
+#   - MinorAllocation.student → Student.minorallocation_set (accessed as 'minorallocation' in filters)
+#   - DoubleMinorAllocation.student → Student.doubleminorallocation_set (accessed as 'doubleminorallocation')
+#   - OEAllocation.student → Student.oeallocation_set (accessed as 'oeallocation')
+#
+# Branch/OE foreign keys in rule models:
+#   - EligibilityRule.branch → MinorBranch.rules
+#   - OEEligibilityRule.oe_subject → OpenElective.rules
+# ============================================================================
+
 
 
 
