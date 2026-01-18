@@ -427,7 +427,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        const windowIsOpen = { window_is_open|yesno:"true,false" }};
+        const windowIsOpen = {{ window_is_open|yesno:"true,false" }};
 
         function initSortable(availableId, selectedId, groupName) {
             const availableListEl = document.getElementById(availableId);
