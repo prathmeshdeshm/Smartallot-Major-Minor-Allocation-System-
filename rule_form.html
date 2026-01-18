@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>
+        {% if rule %}Edit{% else %}Add{% endif %}
+        rule for {{ branch.name }}
+    </h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Rule type</label>
+            <select name="rule_type" class="form-select">
+                <option value="MIN_PERCENTAGE"
+                    {% if rule and rule.rule_type == 'MIN_PERCENTAGE' %}selected{% endif %}>
+                    Minimum Percentage
+                </option>
+                <option value="DEPARTMENT_BLOCK"
+                    {% if rule and rule.rule_type == 'DEPARTMENT_BLOCK' %}selected{% endif %}>
+                    Blocked Departments
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Value</label>
+            <input type="text" name="value" class="form-control"
+                   value="{{ current_value|default_if_none:'' }}"
+                   placeholder="75 for percentage or CSE, IT, ECE for departments">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            {% if rule %}Save changes{% else %}Add rule{% endif %}
+        </button>
+        <a href="{% url 'manage_courses' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}

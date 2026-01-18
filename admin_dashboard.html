@@ -1,0 +1,616 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    .admin-header {
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 24px 0;
+        margin-bottom: 24px;
+    }
+
+    .admin-title {
+        font-weight: 600;
+        font-size: 1.6rem;
+        color: #1f2937;
+    }
+
+    .admin-subtitle {
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+
+    .admin-header-chip {
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        background: #e5f0ff;
+        color: #1d4ed8;
+        font-weight: 500;
+    }
+
+    .admin-header-status {
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        background: #ecfdf3;
+        color: #15803d;
+        font-weight: 500;
+    }
+
+    /* Stats */
+    .stats-card {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        margin-bottom: 16px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+    .stats-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+    .stats-label {
+        font-size: 0.8rem;
+        color: #6b7280;
+    }
+    .stats-value {
+        font-weight: 600;
+        font-size: 1.3rem;
+        color: #111827;
+    }
+
+    /* Generic section cards */
+    .section-card {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        margin-bottom: 20px;
+    }
+    .section-card-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .section-card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .section-card-body {
+        padding: 18px;
+    }
+    .section-muted {
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+
+    /* Allocation buttons */
+    .btn-allocation {
+        border-radius: 999px;
+        padding: 9px 18px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+        border: none;
+        margin: 4px 6px;
+    }
+
+    /* Management buttons */
+    .btn-management {
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Table styles */
+    .table-wrapper {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    }
+    .table-modern {
+        margin-bottom: 0;
+    }
+    .table-modern thead th {
+        background: #f3f4f6;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+    .table-modern tbody tr:nth-child(even) {
+        background-color: #fafbff;
+    }
+    .table-modern tbody tr:hover {
+        background-color: #eef2ff;
+    }
+
+    .preference-badge {
+        display: inline-block;
+        background: #eef2ff;
+        color: #374151;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin: 2px;
+        border: 1px solid #c7d2fe;
+    }
+    .no-preferences {
+        color: #9ca3af;
+        font-style: italic;
+        font-size: 0.85rem;
+    }
+
+    .submitted-time {
+        font-size: 0.7rem;
+        color: #6b7280;
+        margin-top: 3px;
+        display: block;
+    }
+
+    .avatar-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .progress {
+        border-radius: 999px;
+        overflow: hidden;
+        background-color: #e5e7eb;
+    }
+    .progress-bar {
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* Table toolbar */
+    .table-toolbar {
+        padding: 10px 16px;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        background: #fafafa;
+    }
+    .toolbar-search {
+        max-width: 260px;
+    }
+    .form-control-sm {
+        font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+        .admin-header {
+            padding: 18px 0;
+        }
+        .btn-allocation {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="admin-header">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <div class="admin-title">Admin Dashboard</div>
+                <div class="admin-subtitle">
+                    Oversee student preferences, run allocation, and manage courses.
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-md-end gap-1">
+                <span class="admin-header-chip">
+                    <i class="fas fa-user-shield me-1"></i> System Administrator
+                </span>
+                <span class="admin-header-status mb-1">
+                    <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i> All systems operational
+                </span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Quick stats -->
+    <div class="row mb-3">
+        <div class="col-md-3 col-6">
+            <div class="card stats-card">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stats-label">Total Students</div>
+                        <div class="stats-value">{{ students_with_prefs.count }}</div>
+                    </div>
+                    <div class="stats-icon bg-primary-subtle text-primary-emphasis">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card stats-card">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stats-label">Minor 1 Allocated</div>
+                        <div class="stats-value">{{ minor_allocations.count }}</div>
+                    </div>
+                    <div class="stats-icon bg-info-subtle text-info-emphasis">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card stats-card">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stats-label">Minor 2 Allocated</div>
+                        <div class="stats-value">{{ double_minor_allocations.count }}</div>
+                    </div>
+                    <div class="stats-icon bg-warning-subtle text-warning-emphasis">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="card stats-card">
+                <div class="card-body d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stats-label">OE Allocated</div>
+                        <div class="stats-value">{{ oe_allocations.count }}</div>
+                    </div>
+                    <div class="stats-icon bg-success-subtle text-success-emphasis">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preference window section -->
+    <div class="section-card mb-4">
+        <div class="section-card-header">
+            <div class="section-card-title">
+                <i class="far fa-clock text-primary"></i> Preference Window
+            </div>
+        </div>
+        <div class="section-card-body">
+            <form method="post" class="row g-3 align-items-end">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <label class="form-label">Start at</label>
+                    <input type="datetime-local"
+                           name="start_at"
+                           class="form-control"
+                           value="{{ window_start_value|default_if_none:'' }}">
+                    <small class="text-muted">
+                        From this time students can edit preferences.
+                    </small>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">End at</label>
+                    <input type="datetime-local"
+                           name="end_at"
+                           class="form-control"
+                           value="{{ window_end_value|default_if_none:'' }}">
+                    <small class="text-muted">
+                        After this time preferences are locked.
+                    </small>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check mt-4 pt-2">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="window_active"
+                               name="is_active"
+                               {% if window_is_active %}checked{% endif %}>
+                        <label for="window_active" class="form-check-label">
+                            Window active
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2 text-md-end">
+                    <button type="submit"
+                            name="save_window"
+                            class="btn btn-primary w-100">
+                        Save window
+                    </button>
+                </div>
+            </form>
+
+            <hr class="my-3">
+
+            <p class="mb-0">
+                <strong>Current window:</strong>
+                {% if window %}
+                    {{ window.start_at|date:"d M Y, H:i" }}
+                    →
+                    {{ window.end_at|date:"d M Y, H:i" }}
+                    {% if window.is_active %}
+                        <span class="badge bg-success ms-2">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary ms-2">Inactive</span>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">No window configured.</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Controls row: allocation + management -->
+    <div class="row mb-4">
+        <!-- Allocation controls -->
+        <div class="col-lg-8 mb-3 mb-lg-0">
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-card-title">
+                        <i class="fas fa-cogs text-primary"></i> Allocation Engine
+                    </div>
+                    <span class="badge bg-light text-muted">
+                        Uses latest student preferences and eligibility rules
+                    </span>
+                </div>
+                <div class="section-card-body">
+                    <p class="section-muted mb-3">
+                        Run allocation for Minor 1, Minor 2, and Open Electives. You can re-run allocation
+                        after changing capacities or rules; results will overwrite previous allocations.
+                    </p>
+                    <form method="post" class="d-flex flex-wrap justify-content-start">
+                        {% csrf_token %}
+                        <button type="submit" name="run_minor1" class="btn btn-primary btn-allocation">
+                            <i class="fas fa-play me-1"></i> Run Minor 1
+                        </button>
+                        <button type="submit" name="run_minor2" class="btn btn-outline-warning btn-allocation">
+                            <i class="fas fa-play me-1"></i> Run Minor 2
+                        </button>
+                        <button type="submit" name="run_oe" class="btn btn-outline-success btn-allocation">
+                            <i class="fas fa-play me-1"></i> Run OE
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Management / Reports -->
+        <div class="col-lg-4">
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-card-title">
+                        <i class="fas fa-tools text-secondary"></i> Management & Reports
+                    </div>
+                </div>
+                <div class="section-card-body">
+                    <p class="section-muted mb-3">
+                        Configure branches, open electives, and eligibility rules, or export allocation results.
+                    </p>
+                    <a href="{% url 'manage_courses' %}" class="btn btn-outline-primary btn-management">
+                        <i class="fas fa-cog me-2"></i> Manage Courses & Rules
+                    </a>
+                    <a href="{% url 'download_csv_report' %}" class="btn btn-outline-success btn-management">
+                        <i class="fas fa-download me-2"></i> Download Allocation Report (CSV)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student preferences table -->
+    <div class="table-wrapper mb-4">
+        <div class="table-toolbar">
+            <div class="fw-semibold">
+                Student Submitted Preferences
+            </div>
+            <div class="ms-auto d-flex flex-wrap align-items-center gap-2">
+                <div class="toolbar-search">
+                    <input type="text" id="studentSearch" class="form-control form-control-sm"
+                           placeholder="Search by name or roll no">
+                </div>
+                <select id="submissionFilter" class="form-select form-select-sm">
+                    <option value="all">All students</option>
+                    <option value="submitted">With preferences</option>
+                    <option value="missing">Without any preferences</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-modern align-middle" id="studentsTable">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Roll No</th>
+                        <th>%</th>
+                        <th>Minor 1</th>
+                        <th>Minor 2</th>
+                        <th>Open Elective</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students_with_prefs %}
+                    <tr
+                        data-name="{{ student.name|lower }}"
+                        data-roll="{{ student.roll_no }}"
+                        data-has-any="{% if student.minor_preferences.exists or student.double_minor_preferences.exists or student.oe_preferences.exists %}1{% else %}0{% endif %}"
+                    >
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    {{ student.name|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">{{ student.name }}</div>
+                                    <div class="text-muted" style="font-size:0.8rem;">
+                                        {{ student.get_department_display }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark">{{ student.roll_no }}</span>
+                        </td>
+                        <td style="min-width:90px;">
+                            <div class="progress" style="height: 18px;">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {{ student.percentage }}%">
+                                    {{ student.percentage }}%
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Minor 1 -->
+                        <td style="min-width:220px;">
+                            {% for pref in student.minor_preferences.all|dictsort:"priority" %}
+                                <span class="preference-badge">
+                                    {{ pref.priority }}. {{ pref.minor_branch.name }}
+                                </span>
+                            {% empty %}
+                                <span class="no-preferences">Not submitted</span>
+                            {% endfor %}
+                            {% if student.minor_time %}
+                            <span class="submitted-time">
+                                <i class="far fa-clock me-1"></i>
+                                {{ student.minor_time|date:"d M Y, H:i" }}
+                            </span>
+                        {% endif %}
+                        </td>
+
+                        <!-- Minor 2 -->
+                        <td style="min-width:220px;">
+                            {% for pref in student.double_minor_preferences.all|dictsort:"priority" %}
+                                <span class="preference-badge">
+                                    {{ pref.priority }}. {{ pref.minor_branch.name }}
+                                </span>
+                            {% empty %}
+                                <span class="no-preferences">Not submitted</span>
+                            {% endfor %}
+                            {% if student.double_minor_time %}
+                            <span class="submitted-time">
+                                <i class="far fa-clock me-1"></i>
+                                {{ student.double_minor_time|date:"d M Y, H:i" }}
+                            </span>
+                        {% endif %}
+                        </td>
+
+                        <!-- OE -->
+                        <td style="min-width:220px;">
+                            {% for pref in student.oe_preferences.all|dictsort:"priority" %}
+                                <span class="preference-badge">
+                                    {{ pref.priority }}. {{ pref.oe_subject.name }}
+                                </span>
+                            {% empty %}
+                                <span class="no-preferences">Not submitted</span>
+                            {% endfor %}
+                            {% if student.oe_time %}
+    <span class="submitted-time">
+        <i class="far fa-clock me-1"></i>
+        {{ student.oe_time|date:"d M Y, H:i" }}
+    </span>
+{% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <p class="text-muted mb-0">No students found.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple client-side search + filter
+    (function() {
+        const searchInput = document.getElementById('studentSearch');
+        const filterSelect = document.getElementById('submissionFilter');
+        const rows = document.querySelectorAll('#studentsTable tbody tr');
+
+        function applyFilters() {
+            const term = (searchInput.value || '').toLowerCase().trim();
+            const mode = filterSelect.value;
+
+            rows.forEach(row => {
+                const name = row.dataset.name || '';
+                const roll = (row.dataset.roll || '').toLowerCase();
+                const hasAny = row.dataset.hasAny === '1';
+
+                let visible = true;
+
+                if (term && !(name.includes(term) || roll.includes(term))) {
+                    visible = false;
+                }
+
+                if (mode === 'submitted' && !hasAny) {
+                    visible = false;
+                } else if (mode === 'missing' && hasAny) {
+                    visible = false;
+                }
+
+                row.style.display = visible ? '' : 'none';
+            });
+        }
+
+        if (searchInput && filterSelect) {
+            searchInput.addEventListener('input', applyFilters);
+            filterSelect.addEventListener('change', applyFilters);
+        }
+    })();
+</script>
+{% endblock %}

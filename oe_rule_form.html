@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 800px;">
+    <h3 class="mb-4">
+        Add rule for OE: {{ oe.name }}
+    </h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Rule type -->
+        <div class="mb-3">
+            <label class="form-label">Rule type</label>
+            <select name="rule_type" id="id_rule_type" class="form-select">
+                <option value="MIN_PERCENTAGE">Minimum Percentage</option>
+                <option value="DEPARTMENT_BLOCK">Blocked Departments</option>
+            </select>
+        </div>
+
+        <!-- Minimum percentage (shown when MIN_PERCENTAGE selected) -->
+        <div class="mb-3" id="min-percentage-group">
+            <label class="form-label">Minimum percentage required</label>
+            <input type="number"
+                   name="min_percentage"
+                   class="form-control"
+                   placeholder="e.g. 75">
+            <div class="form-text">
+                Students below this percentage cannot choose this OE.
+            </div>
+        </div>
+
+        <!-- Blocked departments (shown when DEPARTMENT_BLOCK selected) -->
+        <div class="mb-3 d-none" id="blocked-dept-group">
+            <label class="form-label">Blocked departments (comma separated)</label>
+            <input type="text"
+                   name="blocked_departments"
+                   class="form-control"
+                   placeholder="e.g. CSE, IT, ENTC">
+            <div class="form-text">
+                Students from these departments cannot choose this OE.
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Save Rule
+        </button>
+        <a href="{% url 'manage_courses' %}" class="btn btn-secondary ms-2">
+            Cancel
+        </a>
+    </form>
+</div>
+
+<script>
+    // Simple toggle between the two value inputs
+    document.addEventListener("DOMContentLoaded", function () {
+        const ruleTypeSelect = document.getElementById("id_rule_type");
+        const minGroup = document.getElementById("min-percentage-group");
+        const blockedGroup = document.getElementById("blocked-dept-group");
+
+        function updateVisibility() {
+            if (ruleTypeSelect.value === "MIN_PERCENTAGE") {
+                minGroup.classList.remove("d-none");
+                blockedGroup.classList.add("d-none");
+            } else {
+                minGroup.classList.add("d-none");
+                blockedGroup.classList.remove("d-none");
+            }
+        }
+
+        ruleTypeSelect.addEventListener("change", updateVisibility);
+        updateVisibility();
+    });
+</script>
+{% endblock %}
