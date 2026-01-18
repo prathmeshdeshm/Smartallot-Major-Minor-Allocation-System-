@@ -6,12 +6,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 
-from allotment.models import (
+# Import from root level (current app directory)
+from models import (
     Student, MinorBranch, OpenElective,
     MinorPreference, MinorAllocation,
     EligibilityRule, OEEligibilityRule
 )
-from allotment.utils import (
+from utils import (
     is_student_eligible,
     is_student_eligible_for_oe,
     run_minor1_allocation
