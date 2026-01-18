@@ -198,3 +198,133 @@ def reset_password_with_otp(request):
         form = OTPPasswordResetForm()
 
     return render(request, 'core/reset_password_with_otp.html', {'form': form})
+
+
+# -------------------------
+# Dashboard Views
+# -------------------------
+def home(request):
+    """
+    Home page view.
+    """
+    return render(request, 'allotment/home.html')
+
+
+def admin_dashboard(request):
+    """
+    Admin dashboard view.
+    """
+    return render(request, 'allotment/admin_dashboard.html')
+
+
+def student_dashboard(request):
+    """
+    Student dashboard view.
+    """
+    return render(request, 'allotment/student_dashboard.html')
+
+
+# -------------------------
+# Course Management Views
+# -------------------------
+def manage_courses(request):
+    """
+    Manage courses view.
+    """
+    return render(request, 'allotment/manage_courses.html')
+
+
+def course_create(request):
+    """
+    Create course view.
+    """
+    return render(request, 'allotment/course_form.html')
+
+
+def course_update(request, course_type, pk):
+    """
+    Update course view.
+    """
+    return render(request, 'allotment/course_form.html')
+
+
+def course_delete(request, course_type, pk):
+    """
+    Delete course view.
+    """
+    return render(request, 'allotment/confirm_delete.html')
+
+
+# -------------------------
+# Rule Management Views
+# -------------------------
+def rule_create(request, branch_pk):
+    """
+    Create rule view.
+    """
+    return render(request, 'allotment/rule_form.html')
+
+
+def rule_edit(request, pk):
+    """
+    Edit rule view.
+    """
+    return render(request, 'allotment/rule_form.html')
+
+
+def rule_toggle_active(request, pk):
+    """
+    Toggle rule active status.
+    """
+    return redirect('manage_courses')
+
+
+def rule_delete(request, pk):
+    """
+    Delete rule view.
+    """
+    return render(request, 'allotment/confirm_delete.html')
+
+
+# -------------------------
+# OE Rule Management Views
+# -------------------------
+def oe_rule_create(request, oe_pk):
+    """
+    Create OE rule view.
+    """
+    return render(request, 'allotment/oe_rule_form.html')
+
+
+def oe_rule_edit(request, pk):
+    """
+    Edit OE rule view.
+    """
+    return render(request, 'allotment/oe_rule_form.html')
+
+
+def oe_rule_toggle_active(request, pk):
+    """
+    Toggle OE rule active status.
+    """
+    return redirect('manage_courses')
+
+
+def oe_rule_delete(request, pk):
+    """
+    Delete OE rule view.
+    """
+    return render(request, 'allotment/confirm_delete.html')
+
+
+# -------------------------
+# Report Views
+# -------------------------
+def download_csv_report(request):
+    """
+    Download CSV report.
+    """
+    from django.http import HttpResponse
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="report.csv"'
+    return response
